@@ -16,7 +16,7 @@ const login = async (body) => {
     if (response[0].hash !== password)
       return { status: 401, message: 'Invalid entries. Try again.' }
     const token = jwt
-      .sign({ id: response[0].user_id }, SECRET, { expiresIn: '1 day' })
+      .sign({ id: response[0].user_id }, SECRET, { expiresIn: '60s' })
     return { status: 200, message: 'Logged in!!!', token }
   } catch (error) {
     return { status: 500, message: error.stack }
@@ -35,7 +35,7 @@ const veryfy = (token) => {
     return { status: 200, message: 'Session verified', decoded }
   } catch (error) {
     if (error.name === 'TokenExpiredError')
-      return { status: 401, message: 'Expired session. Try again.' }
+      return { status: 401, message: 'Expired session. Login again.' }
     return { status: 401, message: 'Invalid session. Try again.' }
   }
   return jwt.verify(token, SECRET)
